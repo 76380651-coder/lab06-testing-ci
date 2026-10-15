@@ -1,0 +1,30 @@
+
+name: Pruebas y calidad de código
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ejecutar pruebas automatizadas
+        run: python -m pytest -v --cov=facturacion --cov-report=term-missing
+
+      - name: Revisar calidad del código
+        run: python -m ruff check .
